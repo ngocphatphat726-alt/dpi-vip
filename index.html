@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PhamHieu Pro - Server</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, Helvetica, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: linear-gradient(135deg, #050505 0%, #8b0000 45%, #003c8f 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 450px;
+            margin: auto;
+        }
+
+        .box {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 20px;
+            padding: 25px;
+            margin-top: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .box:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 35px rgba(0,0,0,.5), 0 0 20px rgba(255, 0, 0, 0.15);
+        }
+
+        .animated {
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 10px;
+            letter-spacing: 0.5px;
+            font-size: 20px;
+        }
+
+        p {
+            text-align: center;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 14px;
+            border: 1px solid rgba(255,255,255,.15);
+            background: rgba(0, 0, 0, 0.2);
+            color: white;
+            font-size: 15px;
+            outline: none;
+            text-align: center;
+            transition: 0.2s;
+        }
+
+        input::placeholder {
+            color: rgba(255,255,255,.4);
+        }
+
+        input:focus {
+            border-color: #ff3b30;
+            box-shadow: 0 0 15px rgba(255, 59, 48, 0.3);
+        }
+
+        input.error {
+            border-color: #ff3b30;
+            box-shadow: 0 0 15px rgba(255, 59, 48, 0.5);
+        }
+
+        input.success {
+            border-color: #34d399;
+            box-shadow: 0 0 15px rgba(52, 211, 153, 0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 12px;
+            border: none;
+            border-radius: 14px;
+            font-weight: bold;
+            font-size: 15px;
+            cursor: pointer;
+            color: white;
+            background: linear-gradient(90deg, #ff0000, #ff5e00);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        button:hover, button:active {
+            transform: translateY(-1px);
+            box-shadow: 0 0 20px rgba(255,0,0,.5), 0 0 30px rgba(255,94,0,.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-secondary:hover {
+            box-shadow: 0 0 20px rgba(255,255,255,0.1);
+        }
+
+        .btn-download {
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+        }
+
+        .btn-download:hover {
+            box-shadow: 0 0 20px rgba(0, 114, 255, 0.5);
+        }
+
+        .btn-dpi {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            margin-top: 12px;
+            color: white;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .btn-dpi:hover {
+            box-shadow: 0 0 20px rgba(255, 65, 108, 0.5);
+        }
+
+        .btn-vip {
+            background: linear-gradient(135deg, #ffd700, #f59e0b);
+            color: #000;
+        }
+
+        .btn-vip:hover {
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+        }
+
+        .btn-admin {
+            background: linear-gradient(135deg, #a855f7, #7c3aed);
+        }
+
+        .btn-admin:hover {
+            box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.5);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #10b981, #059669);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+        }
+
+        .flex-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .flex-btns button {
+            flex: 1;
+            padding: 10px;
+            font-size: 12px;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 40px;
+            font-size: 9px;
+            font-weight: 700;
+            margin-left: 4px;
+        }
+
+        .badge-vip {
+            background: linear-gradient(135deg, #ffd700, #f59e0b);
+            color: #000;
+        }
+
+        .badge-3m {
+            background: rgba(59, 130, 246, 0.15);
+            color: #60a5fa;
+        }
+
+        .badge-2m {
+            background: rgba(139, 92, 246, 0.15);
+            color: #a78bfa;
+        }
+
+        .badge-1m {
+            background: rgba(16, 185, 129, 0.15);
+            color: #34d399;
+        }
+
+        .badge-1w {
+            background: rgba(245, 158, 11, 0.15);
+            color: #fbbf24;
+        }
+
+        .badge-1d {
+            background: rgba(239, 68, 68, 0.15);
+            color: #f87171;
+        }
+
+        .badge-11h {
+            background: rgba(168, 85, 247, 0.15);
+            color: #a855f7;
+        }
+
+        .badge-5h {
+            background: rgba(236, 72, 153, 0.15);
+            color: #ec4899;
+        }
+
+        .download-link {
+            display: inline-block;
+            width: 100%;
+            margin-top: 8px;
+            padding: 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+            color: #fff;
+            background: linear-gradient(135deg, #059669, #10b981);
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .download-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(16, 185, 129, 0.4);
+        }
+
+        .key-info {
+            font-size: 11px;
+            color: rgba(255,255,255,0.4);
+            text-align: center;
+            padding: 6px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 8px;
+            margin-top: 8px;
+            line-height: 1.6;
+            min-height: 36px;
+        }
+
+        .key-info strong {
+            color: #ffd700;
+        }
+
+        .key-info .highlight {
+            color: #34d399;
+        }
+
+        .key-info .error {
+            color: #f87171;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 14px;
+            border-radius: 40px;
+            font-size: 11px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+
+        .status-badge.server {
+            background: rgba(0, 212, 255, 0.12);
+            color: #00d4ff;
+            border: 1px solid rgba(0, 212, 255, 0.1);
+        }
+
+        .status-badge.active {
+            background: rgba(16, 185, 129, 0.12);
+            color: #34d399;
+            border: 1px solid rgba(16, 185, 129, 0.1);
+        }
+
+        .status-badge.vip-badge {
+            background: rgba(255, 215, 0, 0.12);
+            color: #ffd700;
+            border: 1px solid rgba(255, 215, 0, 0.1);
+        }
+
+        .status-success {
+            text-align: center;
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 8px;
+            background: rgba(0,255,136,0.08);
+            border-radius: 10px;
+            border: 1px solid rgba(0,255,136,0.1);
+            margin-bottom: 12px;
+        }
+
+        .status-vip {
+            text-align: center;
+            color: #ffd700;
+            font-weight: bold;
+            font-size: 14px;
+            padding: 8px;
+            background: rgba(255,215,0,0.08);
+            border-radius: 10px;
+            border: 1px solid rgba(255,215,0,0.1);
+            margin-bottom: 12px;
+        }
+
+        .server-status {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            padding: 4px 0;
+            margin-bottom: 10px;
+            font-size: 11px;
+        }
+
+        .server-status .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 4px;
+            animation: pulseDot 1.5s ease-in-out infinite;
+        }
+
+        .server-status .dot.online {
+            background: #34d399;
+            box-shadow: 0 0 20px rgba(52, 211, 153, 0.3);
+        }
+
+        @keyframes pulseDot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        .result-container {
+            margin-top: 10px;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 5px;
+            border-bottom: 1px solid rgba(255,255,255,.06);
+        }
+
+        .result-item:last-child {
+            border-bottom: none;
+        }
+
+        .result-item span {
+            color: #e0e0e0;
+            font-size: 14px;
+        }
+
+        .result-item strong {
+            font-size: 17px;
+            color: #00ff88;
+            text-shadow: 0 0 12px rgba(0,255,136,.4);
+        }
+
+        .result-item .vip-value {
+            color: #ffd700;
+            text-shadow: 0 0 12px rgba(255,215,0,.4);
+        }
+
+        #deviceName {
+            color: #00ff99;
+            font-weight: bold;
+            font-size: 20px;
+            text-shadow: 0 0 12px rgba(0,255,153,.35);
+            text-align: center;
+        }
+
+        .contact {
+            text-align: center;
+            margin-top: 12px;
+        }
+
+        .contact p {
+            font-size: 13px;
+            color: rgba(255,255,255,0.5);
+        }
+
+        .admin-section {
+            background: rgba(168, 85, 247, 0.04);
+            border-radius: 10px;
+            padding: 12px;
+            border: 1px solid rgba(168, 85, 247, 0.06);
+            margin-bottom: 10px;
+        }
+
+        .admin-section .title {
+            color: #a855f7;
+            font-size: 11px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .admin-section .input-row {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .admin-section .input-row input {
+            flex: 1;
+            min-width: 100px;
+            padding: 8px 10px;
+            font-size: 12px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: white;
+            outline: none;
+        }
+
+        .admin-section .input-row input:focus {
+            border-color: #a855f7;
+        }
+
+        .admin-section .input-row select {
+            flex: 1;
+            min-width: 80px;
+            padding: 8px 10px;
+            font-size: 12px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: white;
+            outline: none;
+            appearance: none;
+            -webkit-appearance: none;
+        }
+
+        .admin-section .input-row select option {
+            background: #1a1a2e;
+            color: white;
+        }
+
+        .admin-section .input-row select:focus {
+            border-color: #a855f7;
+        }
+
+        .admin-section .input-row button {
+            flex: 0 0 auto;
+            padding: 8px 14px;
+            font-size: 10px;
+            margin-top: 0;
+            border-radius: 10px;
+        }
+
+        .vip-list {
+            max-height: 120px;
+            overflow-y: auto;
+            font-size: 10px;
+        }
+
+        .vip-list .vip-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.02);
+        }
+
+        .vip-list .vip-item .key-text {
+            font-family: monospace;
+            color: #ffd700;
+            font-size: 9px;
+        }
+
+        .vip-list .vip-item .status-text {
+            font-size: 8px;
+            color: rgba(255,255,255,0.3);
+        }
+
+        .type-selector {
+            display: flex;
+            gap: 4px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+
+        .type-selector .type-btn {
+            flex: 1;
+            min-width: 50px;
+            padding: 4px 6px;
+            border-radius: 6px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(0,0,0,0.2);
+            color: rgba(255,255,255,0.3);
+            font-size: 7px;
+            font-weight: 600;
+            cursor: pointer;
+            text-align: center;
+            transition: 0.3s;
+            text-transform: uppercase;
+        }
+
+        .type-selector .type-btn:hover {
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .type-selector .type-btn.active {
+            border-color: #a855f7;
+            color: #a855f7;
+            background: rgba(168, 85, 247, 0.04);
+        }
+
+        @media (max-width: 400px) {
+            .box {
+                padding: 16px 12px;
+            }
+            h2 {
+                font-size: 17px;
+            }
+            input, button, select {
+                padding: 11px;
+                font-size: 13px;
+            }
+            .result-item span {
+                font-size: 12px;
+            }
+            .result-item strong {
+                font-size: 15px;
+            }
+            .flex-btns button {
+                font-size: 10px;
+                padding: 8px;
+            }
+            .admin-section .input-row {
+                flex-direction: column;
+            }
+            .admin-section .input-row button {
+                width: 100%;
+            }
+            .type-selector .type-btn {
+                font-size: 6px;
+                padding: 3px 4px;
+                min-width: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- LOGIN BOX -->
+        <div id="loginBox" class="box animated">
+            <h2>🔑 XÁC THỰC HỆ THỐNG</h2>
+            <div id="appStatusBadge" class="status-badge server">🌐 SERVER ONLINE</div>
+            <p>Vui lòng nhập Key kích hoạt để tiếp tục</p>
+            <input type="text" id="keyInput" placeholder="Nhập Key tại đây...">
+            <button onclick="checkKey()">KÍCH HOẠT</button>
+            <div class="key-info" id="keyInfo">🔑 Nhập key để bắt đầu</div>
+        </div>
+
+        <!-- SCAN BOX -->
+        <div id="scanBox" class="box animated" style="display: none;">
+            <h2>⚡ ĐANG TỐI ƯU HỆ THỐNG</h2>
+            <p>Vui lòng chờ trong giây lát...</p>
+            <div class="progress-bar-container">
+                <div id="progressBar" class="progress-bar"></div>
+            </div>
+            <div id="percent">0%</div>
+        </div>
+
+        <!-- MAIN APP -->
+        <div id="mainApp" class="box animated" style="display: none;">
+            <h2 id="deviceName">📱 PHAMHIEU PRO</h2>
+            <div id="statusBadge" class="status-success">✓ CẤU HÌNH HOÀN TẤT</div>
+
+            <!-- Server Status -->
+            <div class="server-status">
+                <span style="color:rgba(255,255,255,0.4);font-size:10px;">🌐 SERVER</span>
+                <span style="color:#34d399;font-size:10px;font-weight:700;" id="serverStatusText">● ONLINE</span>
+                <span style="color:rgba(255,255,255,0.4);font-size:10px;">📡 PING</span>
+                <span style="color:#34d399;font-size:10px;font-weight:700;" id="pingText">32ms</span>
+            </div>
+
+            <div class="result-container">
+                <div class="result-item"><span>Nhìn Xung Quanh:</span> <strong id="look">0</strong></div>
+                <div class="result-item"><span>Red Dot Sight:</span> <strong id="red">0</strong></div>
+                <div class="result-item"><span>Ống Ngắm 2x:</span> <strong id="scope2">0</strong></div>
+                <div class="result-item"><span>Ống Ngắm 4x:</span> <strong id="scope4">0</strong></div>
+                <div class="result-item"><span>Ống Ngắm AWM:</span> <strong id="awm">0</strong></div>
+                <div class="result-item"><span>Nhìn Linh Hoạt:</span> <strong id="free">0</strong></div>
+                <div class="result-item"><span>Nút Bắn Khuyến Nghị:</span> <strong id="fire">0</strong>%</div>
+            </div>
+
+            <button class="btn-download" onclick="downloadConfig()">📦 TẢI PROFILE</button>
+
+            <div style="margin-top: 12px;">
+                <a href="https://www.mediafire.com/file/avw3h12ddiobhho/DPIVIP.mobileconfig/file" target="_blank" class="download-link">
+                    🎯 CÀI FILE DPI VIP (MediaFire)
+                </a>
+                <p style="font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 4px;">⬇️ Nhấn vào link để tải file .mobileconfig DPI VIP</p>
+            </div>
+
+            <div class="flex-btns">
+                <button class="btn-vip" onclick="showKeyInfo()">🔑 KEY INFO</button>
+                <button class="btn-admin" onclick="showAdminPanel()">👑 ADMIN</button>
+                <button class="btn-secondary" onclick="resetApp()">🔄 RESET</button>
+            </div>
+
+            <div class="contact">
+                <p>📞 Liên hệ Zalo Admin: 0976457017</p>
+            </div>
+        </div>
+
+        <!-- ADMIN PANEL -->
+        <div id="adminPanel" class="box animated" style="display: none;">
+            <h2>👑 QUẢN LÝ HỆ THỐNG</h2>
+            <p>Quản lý key và cấu hình hệ thống</p>
+
+            <!-- TẠO KEY -->
+            <div class="admin-section">
+                <div class="title">🆕 TẠO KEY MỚI</div>
+                <div class="input-row">
+                    <input type="text" id="newKeyInput" placeholder="Nhập key mới..." style="flex:1;">
+                    <select id="keyTypeSelect">
+                        <option value="vip">⭐ Vĩnh Viễn</option>
+                        <option value="3m">📅 3 Tháng</option>
+                        <option value="2m">📅 2 Tháng</option>
+                        <option value="1m">📅 1 Tháng</option>
+                        <option value="1w">📅 1 Tuần</option>
+                        <option value="1d">📅 1 Ngày</option>
+                        <option value="11h">⏰ 11 Giờ</option>
+                        <option value="5h">⏰ 5 Giờ</option>
+                    </select>
+                    <button class="btn-success" onclick="createKey()" style="flex:0 0 auto;padding:8px 14px;font-size:10px;">➕ TẠO</button>
+                </div>
+                <div id="createResult" style="font-size:10px;margin-top:4px;text-align:center;color:rgba(255,255,255,0.3);">
+                    Nhập key, chọn loại và nhấn TẠO
+                </div>
+            </div>
+
+            <!-- THÊM/XÓA VIP -->
+            <div class="admin-section">
+                <div class="title">⭐ THÊM/XÓA VIP CHO KEY</div>
+                <div class="input-row">
+                    <input type="text" id="vipKeyInput" placeholder="Nhập key cần quản lý..." style="flex:1;">
+                    <button class="btn-success" onclick="addVipToKey()" style="flex:1;padding:8px 10px;font-size:9px;">⭐ THÊM VIP</button>
+                    <button class="btn-danger" onclick="removeVipFromKey()" style="flex:1;padding:8px 10px;font-size:9px;">🗑️ XÓA VIP</button>
+                </div>
+                <div id="vipActionResult" style="font-size:10px;margin-top:4px;text-align:center;color:rgba(255,255,255,0.3);">
+                    Chọn key và thực hiện hành động
+                </div>
+            </div>
+
+            <!-- DANH SÁCH KEY VIP -->
+            <div style="background:rgba(0,0,0,0.2);border-radius:10px;padding:10px;margin-bottom:10px;">
+                <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;">
+                    <span style="font-size:10px;font-weight:600;color:#ffd700;">⭐ KEY VIP</span>
+                    <span style="font-size:8px;color:rgba(255,255,255,0.3);" id="vipCountDisplay">0 key</span>
+                </div>
+                <div id="vipKeyList" class="vip-list">
+                    <!-- Danh sách key VIP -->
+                </div>
+            </div>
+
+            <!-- DANH SÁCH TẤT CẢ KEY -->
+            <hr style="border:1px solid rgba(255,255,255,0.05);margin:10px 0;">
+
+            <h2 style="font-size:15px;">📋 TẤT CẢ KEY</h2>
+            <div id="allKeyList" style="max-height:180px;overflow-y:auto;font-size:10px;background:rgba(0,0,0,0.2);border-radius:10px;padding:10px;margin-top:6px;">
+                <!-- Danh sách tất cả key -->
+            </div>
+            <button class="btn-secondary" onclick="closeAdminPanel()">ĐÓNG</button>
+        </div>
+
+    </div>
+
+    <script>
+        // ============================================================
+        // DATABASE KEY - TẤT CẢ LOẠI
+        // ============================================================
+        const ADMIN_KEY = "NPAIMLOCKLIVE";
+
+        // Map loại key -> nhãn hiển thị
+        const KEY_TYPE_LABELS = {
+            'vip': '⭐ Vĩnh Viễn',
+            '3m': '📅 3 Tháng',
+            '2m': '📅 2 Tháng',
+            '1m': '📅 1 Tháng',
+            '1w': '📅 1 Tuần',
+            '1d': '📅 1 Ngày',
+            '11h': '⏰ 11 Giờ',
+            '5h': '⏰ 5 Giờ'
+        };
+
+        // Map loại key -> badge class
+        const KEY_TYPE_BADGE = {
+            'vip': 'badge-vip',
+            '3m': 'badge-3m',
+            '2m': 'badge-2m',
+            '1m': 'badge-1m',
+            '1w': 'badge-1w',
+            '1d': 'badge-1d',
+            '11h': 'badge-11h',
+            '5h': 'badge-5h'
+        };
+
+        // Map loại key -> thời gian (ms)
+        const KEY_TYPE_DURATION = {
+            'vip': Infinity,
+            '3m': 90 * 24 * 60 * 60 * 1000,
+            '2m': 60 * 24 * 60 * 60 * 1000,
+            '1m': 30 * 24 * 60 * 60 * 1000,
+            '1w': 7 * 24 * 60 * 60 * 1000,
+            '1d': 24 * 60 * 60 * 1000,
+            '11h': 11 * 60 * 60 * 1000,
+            '5h': 5 * 60 * 60 * 1000
+        };
+
+        let keyDB = {};
+
+        function initKeyDB() {
+            const saved = localStorage.getItem('phamhieu_keydb_v10');
+            if (saved) {
+                try {
+                    keyDB = JSON.parse(saved);
+                    console.log('📦 Đã tải key database');
+                    return;
+                } catch (e) {}
+            }
+
+            // Tạo key mẫu cho từng loại
+            const sampleKeys = {
+                'vip': ['VIP-9F3A-7B2C', 'VIP-4E8D-1F5A', 'VIP-7C1B-3D9E'],
+                '3m': ['3M-A1B2-C3D4', '3M-E5F6-G7H8', '3M-I9J0-K1L2'],
+                '2m': ['2M-XIZRE-M1CO4', '2M-3SD0F-9OBSF', '2M-GVMBA-MTLR3'],
+                '1m': ['1M-JNFHC-47S53', '1M-CZZPW-FN5EV', '1M-O3O57-PWBCX'],
+                '1w': ['1W-U06TP-289CE', '1W-18IEA-GOYTR', '1W-8YJ8D-SUE2C'],
+                '1d': ['1D-A1B2-C3D4', '1D-E5F6-G7H8', '1D-I9J0-K1L2'],
+                '11h': ['11H-LEGMF-UD284', '11H-ZP2FC-X2DM7', '11H-UZ9RH-5502Y'],
+                '5h': ['5H-DYAZG-VHD7Y', '5H-1LLJS-ENRST', '5H-FML6M-FUWDC']
+            };
+
+            Object.keys(sampleKeys).forEach(type => {
+                sampleKeys[type].forEach(k => {
+                    const isVip = type === 'vip';
+                    keyDB[k] = {
+                        vip: isVip,
+                        type: type,
+                        activatedAt: null,
+                        status: 'inactive'
+                    };
+                });
+            });
+
+            // Thêm key mẫu VITA
+            const vitaKeys = ['VITA-9F3A-7B2C', 'VITA-4E8D-1F5A', 'VITA-7C1B-3D9E'];
+            vitaKeys.forEach(k => {
+                keyDB[k] = {
+                    vip: false,
+                    type: '1m',
+                    activatedAt: null,
+                    status: 'inactive'
+                };
+            });
+
+            saveKeyDB();
+        }
+
+        function saveKeyDB() {
+            localStorage.setItem('phamhieu_keydb_v10', JSON.stringify(keyDB));
+        }
+
+        function getKeyTypeLabel(type) {
+            return KEY_TYPE_LABELS[type] || type;
+        }
+
+        function getKeyBadge(type) {
+            return KEY_TYPE_BADGE[type] || 'badge-1m';
+        }
+
+        function getKeyDuration(type) {
+            return KEY_TYPE_DURATION[type] || 0;
+        }
+
+        function getExpiryDate(activatedAt, type) {
+            if (type === 'vip') return null;
+            const duration = getKeyDuration(type);
+            if (duration === Infinity) return null;
+            const date = new Date(activatedAt);
+            return new Date(date.getTime() + duration).toISOString();
+        }
+
+        function isKeyExpired(key) {
+            const data = keyDB[key];
+            if (!data || data.type === 'vip') return false;
+            if (!data.activatedAt) return false;
+            const expiry = getExpiryDate(data.activatedAt, data.type);
+            if (!expiry) return false;
+            return new Date() > new Date(expiry);
+        }
+
+        function getDaysLeft(key) {
+            const data = keyDB[key];
+            if (!data || data.type === 'vip') return '♾️';
+            if (!data.activatedAt) return 'Chưa kích hoạt';
+            const expiry = getExpiryDate(data.activatedAt, data.type);
+            if (!expiry) return '♾️';
+            const diff = new Date(expiry) - new Date();
+            if (diff <= 0) return 'Hết hạn';
+            const days = Math.floor(diff / (24 * 60 * 60 * 1000));
+            const hours = Math.floor((diff % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
+            if (days > 0) return `${days} ngày ${hours} giờ`;
+            return `${hours} giờ`;
+        }
+
+        // ============================================================
+        // SERVER
+        // ============================================================
+        function updateServer() {
+            const ping = Math.floor(20 + Math.random() * 40);
+            document.getElementById('pingText').textContent = ping + 'ms';
+            document.getElementById('serverStatusText').textContent = '● ONLINE';
+        }
+
+        setInterval(updateServer, 3000);
+        updateServer();
+
+        // ============================================================
+        // LOGIN
+        // ============================================================
+        let currentUser = null;
+
+        function checkKey() {
+            const key = document.getElementById("keyInput").value.trim().toUpperCase();
+            const infoEl = document.getElementById("keyInfo");
+            const inputEl = document.getElementById("keyInput");
+
+            inputEl.className = '';
+
+            if (key === ADMIN_KEY) {
+                localStorage.setItem('phamhieu_current_key', key);
+                currentUser = { key: key, isAdmin: true };
+                document.getElementById("loginBox").style.display = "none";
+                document.getElementById("scanBox").style.display = "block";
+                infoEl.innerHTML = '👑 Admin Key hợp lệ!';
+                inputEl.className = 'success';
+                startScan();
+                return;
+            }
+
+            if (!keyDB[key]) {
+                infoEl.innerHTML = '❌ Key không hợp lệ! Vui lòng thử lại.';
+                inputEl.className = 'error';
+                return;
+            }
+
+            const data = keyDB[key];
+
+            // Kiểm tra hết hạn
+            if (data.type !== 'vip' && data.activatedAt) {
+                if (isKeyExpired(key)) {
+                    infoEl.innerHTML = `⛔ Key đã hết hạn! (${getKeyTypeLabel(data.type)})`;
+                    inputEl.className = 'error';
+                    return;
+                }
+            }
+
+            if (!data.activatedAt) {
+                data.activatedAt = new Date().toISOString();
+                data.status = 'active';
+                saveKeyDB();
+                const expiry = getExpiryDate(data.activatedAt, data.type);
+                const expiryText = expiry ? `Hết hạn: ${new Date(expiry).toLocaleString()}` : '♾️ Không giới hạn';
+                infoEl.innerHTML = `✅ Key ${key} đã được kích hoạt! (${getKeyTypeLabel(data.type)})<br>${expiryText}`;
+                inputEl.className = 'success';
+            } else {
+                const expiry = getExpiryDate(data.activatedAt, data.type);
+                const expiryText = expiry ? `Hết hạn: ${new Date(expiry).toLocaleString()}` : '♾️ Không giới hạn';
+                infoEl.innerHTML = `✅ Key ${key} hợp lệ! (${getKeyTypeLabel(data.type)})<br>${expiryText}`;
+                inputEl.className = 'success';
+            }
+
+            currentUser = { key: key, isAdmin: false, isVip: data.vip || false, type: data.type };
+            localStorage.setItem('phamhieu_current_key', key);
+
+            document.getElementById("loginBox").style.display = "none";
+            document.getElementById("scanBox").style.display = "block";
+
+            const badge = document.getElementById('statusBadge');
+            if (data.vip) {
+                badge.className = 'status-vip';
+                badge.innerHTML = '⭐ KEY VIP - CẤU HÌNH CAO CẤP';
+            } else {
+                badge.className = 'status-success';
+                badge.innerHTML = '✓ CẤU HÌNH HOÀN TẤT';
+            }
+
+            startScan();
+        }
+
+        // ============================================================
+        // SCAN
+        // ============================================================
+        function startScan() {
+            let p = 0;
+            const timer = setInterval(() => {
+                p++;
+                document.getElementById("progressBar").style.width = p + "%";
+                document.getElementById("percent").innerText = p + "%";
+                if (p >= 100) {
+                    clearInterval(timer);
+                    document.getElementById("scanBox").style.display = "none";
+                    showResult();
+                }
+            }, 30);
+        }
+
+        // ============================================================
+        // RESULT
+        // ============================================================
+        function rand(min, max) { return Math.floor(Math.random() * (max - min + 1)) + min; }
+
+        function showResult() {
+            const key = currentUser ? currentUser.key : '';
+            const isVip = currentUser ? currentUser.isVip : false;
+
+            document.getElementById("look").innerText = rand(190, 200);
+            document.getElementById("red").innerText = rand(150, 200);
+            document.getElementById("scope2").innerText = rand(150, 200);
+            document.getElementById("scope4").innerText = rand(150, 200);
+            document.getElementById("awm").innerText = rand(150, 200);
+            document.getElementById("free").innerText = rand(150, 200);
+            document.getElementById("fire").innerText = rand(30, 50);
+
+            document.getElementById("mainApp").style.display = "block";
+            localStorage.setItem('phamhieu_current_key', key || '');
+        }
+
+        function resetApp() {
+            if (confirm('⚠️ Bạn có chắc muốn reset về màn hình đăng nhập?')) {
+                document.getElementById("mainApp").style.display = "none";
+                document.getElementById("loginBox").style.display = "block";
+                document.getElementById("keyInput").value = '';
+                document.getElementById("keyInfo").innerHTML = '🔑 Nhập key để bắt đầu';
+                document.getElementById("keyInput").className = '';
+                document.getElementById("progressBar").style.width = '0%';
+                document.getElementById("percent").innerText = '0%';
+                currentUser = null;
+                localStorage.removeItem('phamhieu_current_key');
+                document.getElementById("adminPanel").style.display = "none";
+            }
+        }
+
+        // ============================================================
+        // KEY INFO
+        // ============================================================
+        function showKeyInfo() {
+            const key = currentUser ? currentUser.key : '';
+            if (!key) {
+                alert('⚠️ Không tìm thấy thông tin key!');
+                return;
+            }
+
+            const data = keyDB[key];
+            if (!data) {
+                alert('⚠️ Không tìm thấy thông tin key!');
+                return;
+            }
+
+            let msg = `🔑 THÔNG TIN KEY\n\n`;
+            msg += `📌 Key: ${key}\n`;
+            msg += `📦 Loại: ${getKeyTypeLabel(data.type)}\n`;
+            msg += `⭐ VIP: ${data.vip ? '✅ Có' : '❌ Không'}\n`;
+
+            if (data.activatedAt) {
+                const activated = new Date(data.activatedAt);
+                msg += `📅 Kích hoạt: ${activated.toLocaleString()}\n`;
+                const daysLeft = getDaysLeft(key);
+                msg += `⏳ Thời gian còn: ${daysLeft}\n`;
+                const expiry = getExpiryDate(data.activatedAt, data.type);
+                if (expiry) {
+                    msg += `📅 Hết hạn: ${new Date(expiry).toLocaleString()}\n`;
+                } else {
+                    msg += `♾️ Không giới hạn\n`;
+                }
+            } else {
+                msg += `📅 Kích hoạt: Chưa kích hoạt\n`;
+            }
+
+            msg += `📊 Trạng thái: ${data.status === 'active' ? '✅ Hoạt động' : '⛔ Chưa kích hoạt'}\n`;
+
+            if (data.vip) {
+                msg += `\n⭐ KEY VIP - ĐÃ MỞ KHÓA TẤT CẢ TÍNH NĂNG`;
+            } else {
+                msg += `\n📦 KEY NORMAL - TÍNH NĂNG CƠ BẢN`;
+            }
+
+            alert(msg);
+        }
+
+        // ============================================================
+        // ADMIN PANEL
+        // ============================================================
+        function showAdminPanel() {
+            const key = document.getElementById("keyInput").value.trim().toUpperCase();
+            if (key !== ADMIN_KEY && key !== 'NPAIMLOCKLIVE') {
+                if (currentUser && currentUser.key !== ADMIN_KEY) {
+                    alert('⛔ Chỉ ADMIN mới có thể truy cập!');
+                    return;
+                }
+                if (!currentUser || currentUser.key !== ADMIN_KEY) {
+                    alert('⛔ Chỉ ADMIN mới có thể truy cập!');
+                    return;
+                }
+            }
+
+            const panel = document.getElementById('adminPanel');
+            renderAdminPanel();
+            panel.style.display = 'block';
+            panel.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function renderAdminPanel() {
+            const listEl = document.getElementById('allKeyList');
+            const vipListEl = document.getElementById('vipKeyList');
+            const vipCountEl = document.getElementById('vipCountDisplay');
+
+            const vipKeys = Object.keys(keyDB).filter(k => keyDB[k].vip === true);
+            vipCountEl.textContent = vipKeys.length + ' key';
+
+            // VIP list
+            if (vipKeys.length === 0) {
+                vipListEl.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.3);padding:10px 0;font-size:10px;">📭 Chưa có key VIP nào</div>';
+            } else {
+                let html = '';
+                vipKeys.forEach(k => {
+                    const data = keyDB[k];
+                    const status = data.status === 'active' ? '🟢 Active' : '🔴 Inactive';
+                    const daysLeft = getDaysLeft(k);
+                    html += `
+                        <div class="vip-item">
+                            <span class="key-text">${k}</span>
+                            <span class="status-text">${getKeyTypeLabel(data.type)}</span>
+                            <span class="status-text">${status}</span>
+                            <span class="status-text">${daysLeft}</span>
+                        </div>
+                    `;
+                });
+                vipListEl.innerHTML = html;
+            }
+
+            // All keys
+            const allKeys = Object.keys(keyDB).sort((a, b) => {
+                if (keyDB[a].vip && !keyDB[b].vip) return -1;
+                if (!keyDB[a].vip && keyDB[b].vip) return 1;
+                return 0;
+            });
+
+            let counts = {};
+            Object.keys(keyDB).forEach(k => {
+                const type = keyDB[k].type;
+                counts[type] = (counts[type] || 0) + 1;
+            });
+
+            let html = `
+                <div style="margin-bottom:6px;font-size:9px;color:rgba(255,255,255,0.4);">
+                    ${Object.keys(counts).map(t => `${getKeyTypeLabel(t)}: ${counts[t]}`).join(' &nbsp;|&nbsp; ')}
+                </div>
+                <div style="font-size:8px;color:rgba(255,255,255,0.2);margin-bottom:4px;border-bottom:1px solid rgba(255,255,255,0.03);padding-bottom:4px;">
+                    ⭐ = VIP &nbsp;|&nbsp; 📦 = Các loại khác
+                </div>
+            `;
+
+            allKeys.forEach(k => {
+                const data = keyDB[k];
+                const isVip = data.vip;
+                const status = data.status === 'active' ? '🟢' : '🔴';
+                const typeLabel = getKeyTypeLabel(data.type);
+                const badgeClass = getKeyBadge(data.type);
+                const vipMark = isVip ? '⭐ ' : '';
+                const daysLeft = getDaysLeft(k);
+
+                html += `
+                    <div style="display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.015);font-size:9px;">
+                        <span style="font-family:monospace;color:${isVip ? '#ffd700' : '#60a5fa'};">${vipMark}${k}</span>
+                        <span>
+                            <span class="badge ${badgeClass}" style="font-size:7px;padding:1px 6px;">${typeLabel}</span>
+                            <span style="font-size:8px;margin-left:4px;">${status}</span>
+                            <span style="font-size:7px;margin-left:4px;color:rgba(255,255,255,0.3);">${daysLeft}</span>
+                        </span>
+                    </div>
+                `;
+            });
+
+            listEl.innerHTML = html;
+        }
+
+        function closeAdminPanel() {
+            document.getElementById('adminPanel').style.display = 'none';
+        }
+
+        // ============================================================
+        // CREATE KEY
+        // ============================================================
+        function createKey() {
+            const key = document.getElementById('newKeyInput').value.trim().toUpperCase();
+            const type = document.getElementById('keyTypeSelect').value;
+            const resultEl = document.getElementById('createResult');
+
+            if (!key) {
+                resultEl.innerHTML = '⚠️ Vui lòng nhập key!';
+                resultEl.style.color = '#f87171';
+                return;
+            }
+
+            if (keyDB[key]) {
+                resultEl.innerHTML = `⚠️ Key ${key} đã tồn tại!`;
+                resultEl.style.color = '#fbbf24';
+                return;
+            }
+
+            const isVip = type === 'vip';
+            keyDB[key] = {
+                vip: isVip,
+                type: type,
+                activatedAt: null,
+                status: 'inactive'
+            };
+
+            saveKeyDB();
+            renderAdminPanel();
+
+            const typeLabel = getKeyTypeLabel(type);
+            resultEl.innerHTML = `✅ Đã tạo key: <strong style="color:#34d399;">${key}</strong> (${typeLabel})`;
+            resultEl.style.color = '#34d399';
+            document.getElementById('newKeyInput').value = '';
+        }
+
+        // ============================================================
+        // VIP MANAGEMENT
+        // ============================================================
+        function addVipToKey() {
+            const key = document.getElementById('vipKeyInput').value.trim().toUpperCase();
+            const resultEl = document.getElementById('vipActionResult');
+
+            if (!key) {
+                resultEl.innerHTML = '⚠️ Vui lòng nhập key!';
+                resultEl.style.color = '#f87171';
+                return;
+            }
+
+            if (!keyDB[key]) {
+                resultEl.innerHTML = '❌ Key không tồn tại!';
+                resultEl.style.color = '#f87171';
+                return;
+            }
+
+            if (keyDB[key].vip) {
+                resultEl.innerHTML = `⚠️ Key ${key} đã có VIP!`;
+                resultEl.style.color = '#fbbf24';
+                return;
+            }
+
+            keyDB[key].vip = true;
+            keyDB[key].type = 'vip';
+            saveKeyDB();
+            renderAdminPanel();
+
+            resultEl.innerHTML = `✅ Đã thêm VIP cho: <strong style="color:#ffd700;">${key}</strong>`;
+            resultEl.style.color = '#34d399';
+            document.getElementById('vipKeyInput').value = '';
+        }
+
+        function removeVipFromKey() {
+            const key = document.getElementById('vipKeyInput').value.trim().toUpperCase();
+            const resultEl = document.getElementById('vipActionResult');
+
+            if (!key) {
+                resultEl.innerHTML = '⚠️ Vui lòng nhập key!';
+                resultEl.style.color = '#f87171';
+                return;
+            }
+
+            if (!keyDB[key]) {
+                resultEl.innerHTML = '❌ Key không tồn tại!';
+                resultEl.style.color = '#f87171';
+                return;
+            }
+
+            if (!keyDB[key].vip) {
+                resultEl.innerHTML = `⚠️ Key ${key} không có VIP!`;
+                resultEl.style.color = '#fbbf24';
+                return;
+            }
+
+            keyDB[key].vip = false;
+            keyDB[key].type = '1m';
+            saveKeyDB();
+            renderAdminPanel();
+
+            resultEl.innerHTML = `🗑️ Đã xóa VIP khỏi: <strong style="color:#f87171;">${key}</strong>`;
+            resultEl.style.color = '#f87171';
+            document.getElementById('vipKeyInput').value = '';
+        }
+
+        // ============================================================
+        // DOWNLOAD CONFIG
+        // ============================================================
+        function downloadConfig() {
+            const profile = `<?xml version="1.0" encoding="UTF-8"?>
+        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+        <plist version="1.0">
+        <dict>
+            <key>PayloadType</key>
+            <string>Configuration</string>
+            <key>PayloadVersion</key>
+            <integer>1</integer>
+            <key>PayloadIdentifier</key>
+            <string>com.phamhieu.config.pro</string>
+            <key>PayloadUUID</key>
+            <string>8A4F1D92-E29B-4D31-9F22-A1B2C3D4E5F6</string>
+            <key>PayloadDisplayName</key>
+            <string>📦 PHAMHIEU PRO SERVER</string>
+            <key>PayloadDescription</key>
+            <string>• Phiên bản: PHAMHIEU PRO SERVER\n• Trạng thái: Hoạt động\n• Tối ưu hóa cấu hình hệ thống iOS\n• Khuyến nghị khởi động lại máy sau khi cài đặt\n• Liên hệ Zalo Admin: 0976457017</string>
+            <key>PayloadOrganization</key>
+            <string>PhamHieu Tech</string>
+            <key>PayloadContent</key>
+            <array>
+                <dict>
+                    <key>PayloadType</key>
+                    <string>com.apple.webClip.managed</string>
+                    <key>PayloadVersion</key>
+                    <integer>1</integer>
+                    <key>PayloadIdentifier</key>
+                    <string>com.phamhieu.webclip</string>
+                    <key>PayloadUUID</key>
+                    <string>9B5F2E03-F30C-5E42-A033-B2C3D4E5F6A7</string>
+                    <key>PayloadDisplayName</key>
+                    <string>PhamHieu Pro</string>
+                    <key>URL</key>
+                    <string>https://ngocphatphat726-alt.github.io/app-ngocphat/</string>
+                    <key>Label</key>
+                    <string>PhamHieu Pro</string>
+                    <key>IsRemovable</key>
+                    <true/>
+                    <key>FullScreen</key>
+                    <true/>
+                </dict>
+            </array>
+        </dict>
+        </plist>`;
+
+            const blob = new Blob([profile], { type: "application/x-apple-aspen-config" });
+            const a = document.createElement("a");
+            a.href = URL.createObjectURL(blob);
+            a.download = "PhamHieu_Pro_Server.mobileconfig";
+            a.click();
+            URL.revokeObjectURL(a.href);
+        }
+
+        // ============================================================
+        // INIT
+        // ============================================================
+        initKeyDB();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 PhamHieu Pro Server - All Key Types loaded');
+            console.log('📊 Tổng số key:', Object.keys(keyDB).length);
+            console.log('⭐ VIP keys:', Object.keys(keyDB).filter(k => keyDB[k].vip).length);
+            console.log('👑 Admin Key:', ADMIN_KEY);
+            console.log('📦 Loại key:', Object.keys(KEY_TYPE_LABELS).join(', '));
+
+            const savedKey = localStorage.getItem('phamhieu_current_key');
+            if (savedKey && keyDB[savedKey]) {
+                document.getElementById('keyInput').value = savedKey;
+            }
+
+            if (savedKey === ADMIN_KEY) {
+                document.getElementById('keyInput').value = ADMIN_KEY;
+            }
+        });
+    </script>
+</body>
+</html>
